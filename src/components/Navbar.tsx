@@ -28,6 +28,12 @@ const Navbar = () => {
             <Link to="/competitions" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Competitions
             </Link>
+            <Link to="/notebooks" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Notebooks
+            </Link>
+            <Link to="/discussions" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Discussions
+            </Link>
             <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               About
             </Link>
@@ -68,6 +74,12 @@ const Navbar = () => {
               </Link>
               <Link to="/competitions" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Competitions
+              </Link>
+              <Link to="/notebooks" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Notebooks
+              </Link>
+              <Link to="/discussions" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Discussions
               </Link>
               <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 About

@@ -9,7 +9,12 @@ import Signup from "./pages/Signup";
 import Explore from "./pages/Explore";
 import Datasets from "./pages/Datasets";
 import Competitions from "./pages/Competitions";
+import CompetitionDetail from "./pages/CompetitionDetail";
+import Leaderboard from "./pages/Leaderboard";
 import About from "./pages/About";
+import UploadDataset from "./pages/UploadDataset";
+import Notebooks from "./pages/Notebooks";
+import Discussions from "./pages/Discussions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,7 +31,12 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/datasets" element={<Datasets />} />
+          <Route path="/upload" element={<UploadDataset />} />
           <Route path="/competitions" element={<Competitions />} />
+          <Route path="/competitions/:id" element={<CompetitionDetail />} />
+          <Route path="/competitions/:id/leaderboard" element={<Leaderboard />} />
+          <Route path="/notebooks" element={<Notebooks />} />
+          <Route path="/discussions" element={<Discussions />} />
           <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

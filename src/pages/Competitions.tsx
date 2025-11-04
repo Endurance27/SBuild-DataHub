@@ -107,9 +107,11 @@ const Competitions = () => {
                 Compete with Ghana's best data scientists to solve real-world challenges and win prizes
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg">
-                  Browse Competitions
-                </Button>
+                <Link to="/competitions">
+                  <Button size="lg">
+                    Browse Competitions
+                  </Button>
+                </Link>
                 <Button size="lg" variant="outline">
                   Host a Competition
                 </Button>
@@ -324,7 +326,9 @@ const Competitions = () => {
                 Join thousands of data scientists solving real problems and making impact in Ghana
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg">Join Your First Competition</Button>
+                <Link to="/competitions/1">
+                  <Button size="lg">Join Your First Competition</Button>
+                </Link>
                 <Button size="lg" variant="outline">Learn How It Works</Button>
               </div>
             </div>
