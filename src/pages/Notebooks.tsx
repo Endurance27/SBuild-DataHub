@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileCode, Search, Heart, MessageSquare, Eye, TrendingUp, Award, Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 
 const Notebooks = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const tutorialsRef = useRef<HTMLDivElement>(null);
 
   const notebooks = [
     {
@@ -116,11 +118,20 @@ const Notebooks = () => {
                 Explore, learn, and share data science notebooks and analysis with the community
               </p>
               <div className="flex gap-4 justify-center">
-                <Button size="lg">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create New Notebook
-                </Button>
-                <Button size="lg" variant="outline">
+                <Link to="/notebooks/create">
+                  <Button size="lg">
+                    <Plus className="mr-2 h-4 w-4" />
+                    Create New Notebook
+                  </Button>
+                </Link>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={() => {
+                    tutorialsRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    setSearchQuery("Tutorial");
+                  }}
+                >
                   Browse Tutorials
                 </Button>
               </div>
@@ -128,7 +139,7 @@ const Notebooks = () => {
           </div>
         </section>
 
-        <section className="py-12">
+        <section className="py-12" ref={tutorialsRef}>
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto space-y-6">
               {/* Search */}

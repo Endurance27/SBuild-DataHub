@@ -17,6 +17,8 @@ import Notebooks from "./pages/Notebooks";
 import Discussions from "./pages/Discussions";
 import DatasetDetail from "./pages/DatasetDetail";
 import NotFound from "./pages/NotFound";
+import HostCompetition from "./pages/HostCompetition";
+import CreateNotebook from "./pages/CreateNotebook";
 
 const queryClient = new QueryClient();
 
@@ -38,8 +40,10 @@ const App = () => (
           <Route path="/competition/:id" element={<CompetitionDetail />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/notebooks" element={<Notebooks />} />
+          <Route path="/notebooks/create" element={<CreateNotebook />} />
           <Route path="/discussions" element={<Discussions />} />
           <Route path="/about" element={<About />} />
+          <Route path="/host-competition" element={<HostCompetition />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

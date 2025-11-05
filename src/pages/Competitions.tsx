@@ -112,7 +112,7 @@ const Competitions = () => {
                 }}>
                   Browse Competitions
                 </Button>
-                <Link to="/upload-dataset">
+                <Link to="/host-competition">
                   <Button size="lg" variant="outline">
                     Host a Competition
                   </Button>
@@ -314,7 +314,7 @@ const Competitions = () => {
                   <p className="text-muted-foreground mb-6">
                     Check back soon for new challenges or host your own competition
                   </p>
-                  <Link to="/upload-dataset">
+                  <Link to="/host-competition">
                     <Button>Host a Competition</Button>
                   </Link>
                 </div>
