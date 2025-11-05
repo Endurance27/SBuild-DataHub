@@ -15,6 +15,7 @@ import About from "./pages/About";
 import UploadDataset from "./pages/UploadDataset";
 import Notebooks from "./pages/Notebooks";
 import Discussions from "./pages/Discussions";
+import DatasetDetail from "./pages/DatasetDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,10 +32,11 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/datasets" element={<Datasets />} />
+          <Route path="/dataset/:id" element={<DatasetDetail />} />
           <Route path="/upload" element={<UploadDataset />} />
           <Route path="/competitions" element={<Competitions />} />
-          <Route path="/competitions/:id" element={<CompetitionDetail />} />
-          <Route path="/competitions/:id/leaderboard" element={<Leaderboard />} />
+          <Route path="/competition/:id" element={<CompetitionDetail />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/notebooks" element={<Notebooks />} />
           <Route path="/discussions" element={<Discussions />} />
           <Route path="/about" element={<About />} />

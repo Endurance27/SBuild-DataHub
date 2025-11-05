@@ -8,9 +8,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MessageSquare, Search, TrendingUp, HelpCircle, Lightbulb, AlertCircle, Plus, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const Discussions = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
+  const [newDiscussionOpen, setNewDiscussionOpen] = useState(false);
+  const [discussionTitle, setDiscussionTitle] = useState("");
+  const [discussionContent, setDiscussionContent] = useState("");
+  const [discussionCategory, setDiscussionCategory] = useState("");
+  const { toast } = useToast();
 
   const discussions = [
     {
@@ -138,6 +149,32 @@ const Discussions = () => {
     discussion.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const handleCreateDiscussion = () => {
+    if (!discussionTitle || !discussionContent || !discussionCategory) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all fields to create a discussion.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Discussion Created!",
+      description: "Your discussion has been posted successfully.",
+    });
+
+    setNewDiscussionOpen(false);
+    setDiscussionTitle("");
+    setDiscussionContent("");
+    setDiscussionCategory("");
+  };
+
+  const handleBrowseTopics = () => {
+    setActiveTab("questions");
+    window.scrollTo({ top: 400, behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -156,11 +193,64 @@ const Discussions = () => {
                 Connect with researchers, ask questions, and share insights with Ghana's data science community
               </p>
               <div className="flex gap-4 justify-center">
-                <Button size="lg">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Start New Discussion
-                </Button>
-                <Button size="lg" variant="outline">
+                <Dialog open={newDiscussionOpen} onOpenChange={setNewDiscussionOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="lg">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Start New Discussion
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px]">
+                    <DialogHeader>
+                      <DialogTitle>Start New Discussion</DialogTitle>
+                      <DialogDescription>
+                        Ask a question, share insights, or start a conversation with the community
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid gap-2">
+                        <Label htmlFor="category">Category</Label>
+                        <Select value={discussionCategory} onValueChange={setDiscussionCategory}>
+                          <SelectTrigger id="category">
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Question">Question</SelectItem>
+                            <SelectItem value="Discussion">Discussion</SelectItem>
+                            <SelectItem value="Issue">Issue</SelectItem>
+                            <SelectItem value="Insight">Insight</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                          id="title"
+                          placeholder="What's your discussion about?"
+                          value={discussionTitle}
+                          onChange={(e) => setDiscussionTitle(e.target.value)}
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="content">Description</Label>
+                        <Textarea
+                          id="content"
+                          placeholder="Provide more details about your discussion..."
+                          rows={6}
+                          value={discussionContent}
+                          onChange={(e) => setDiscussionContent(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => setNewDiscussionOpen(false)}>
+                        Cancel
+                      </Button>
+                      <Button onClick={handleCreateDiscussion}>Post Discussion</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                <Button size="lg" variant="outline" onClick={handleBrowseTopics}>
                   Browse Topics
                 </Button>
               </div>
@@ -204,7 +294,7 @@ const Discussions = () => {
                 />
               </div>
 
-              <Tabs defaultValue="all" className="w-full">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList>
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="trending">

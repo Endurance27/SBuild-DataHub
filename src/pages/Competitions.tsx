@@ -107,14 +107,16 @@ const Competitions = () => {
                 Compete with Ghana's best data scientists to solve real-world challenges and win prizes
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/competitions">
-                  <Button size="lg">
-                    Browse Competitions
+                <Button size="lg" onClick={() => {
+                  document.getElementById('competitions-list')?.scrollIntoView({ behavior: 'smooth' });
+                }}>
+                  Browse Competitions
+                </Button>
+                <Link to="/upload-dataset">
+                  <Button size="lg" variant="outline">
+                    Host a Competition
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline">
-                  Host a Competition
-                </Button>
               </div>
             </div>
           </div>
@@ -145,7 +147,7 @@ const Competitions = () => {
         </section>
 
         {/* Main Content */}
-        <section className="py-12">
+        <section id="competitions-list" className="py-12">
           <div className="container mx-auto px-4">
             <Tabs defaultValue="active" className="w-full">
               <TabsList className="mb-8">
@@ -234,7 +236,9 @@ const Competitions = () => {
                         <Link to={`/competition/${competition.id}`} className="flex-1">
                           <Button className="w-full">View Details</Button>
                         </Link>
-                        <Button variant="outline">Leaderboard</Button>
+                        <Link to="/leaderboard">
+                          <Button variant="outline">Leaderboard</Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   ))}
@@ -310,7 +314,9 @@ const Competitions = () => {
                   <p className="text-muted-foreground mb-6">
                     Check back soon for new challenges or host your own competition
                   </p>
-                  <Button>Host a Competition</Button>
+                  <Link to="/upload-dataset">
+                    <Button>Host a Competition</Button>
+                  </Link>
                 </div>
               </TabsContent>
             </Tabs>
