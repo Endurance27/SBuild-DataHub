@@ -14,6 +14,7 @@ import Leaderboard from "./pages/Leaderboard";
 import About from "./pages/About";
 import UploadDataset from "./pages/UploadDataset";
 import Notebooks from "./pages/Notebooks";
+import NotebookDetail from "./pages/NotebookDetail";
 import Discussions from "./pages/Discussions";
 import DatasetDetail from "./pages/DatasetDetail";
 import NotFound from "./pages/NotFound";
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/competition/:id" element={<CompetitionDetail />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/notebooks" element={<Notebooks />} />
+          <Route path="/notebooks/:id" element={<NotebookDetail />} />
           <Route path="/notebooks/create" element={<CreateNotebook />} />
           <Route path="/discussions" element={<Discussions />} />
           <Route path="/about" element={<About />} />

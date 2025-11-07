@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, Heart, MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface NotebookCardProps {
   notebook: {
@@ -70,7 +71,9 @@ const NotebookCard = ({ notebook, showBorder = false }: NotebookCardProps) => {
       </CardContent>
 
       <CardFooter className="flex gap-2">
-        <Button className="flex-1">View Notebook</Button>
+        <Link to={`/notebooks/${notebook.id}`} className="flex-1">
+          <Button className="w-full">View Notebook</Button>
+        </Link>
         <Button variant="outline">
           <Heart className="h-4 w-4" />
         </Button>
