@@ -359,16 +359,172 @@ const Discussions = () => {
                   ))}
                 </TabsContent>
 
-                <TabsContent value="trending" className="mt-6">
-                  <p className="text-center text-muted-foreground py-8">Trending discussions will appear here</p>
+                <TabsContent value="trending" className="mt-6 space-y-4">
+                  {filteredDiscussions
+                    .filter(d => d.views > 400 || d.replies > 20)
+                    .map((discussion) => (
+                    <Card key={discussion.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback>{discussion.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant={getCategoryColor(discussion.category) as any} className="gap-1">
+                                {getCategoryIcon(discussion.category)}
+                                {discussion.category}
+                              </Badge>
+                              {discussion.solved && (
+                                <Badge variant="outline" className="gap-1 border-green-500 text-green-600">
+                                  ✓ Solved
+                                </Badge>
+                              )}
+                            </div>
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors mb-2">
+                              {discussion.title}
+                            </CardTitle>
+                            <CardDescription>
+                              Started by {discussion.author} • {discussion.lastActive}
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <MessageSquare className="h-4 w-4" />
+                              {discussion.replies} replies
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {discussion.views} views
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {discussion.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </TabsContent>
 
-                <TabsContent value="questions" className="mt-6">
-                  <p className="text-center text-muted-foreground py-8">Question threads will appear here</p>
+                <TabsContent value="questions" className="mt-6 space-y-4">
+                  {filteredDiscussions
+                    .filter(d => d.category === "Question")
+                    .map((discussion) => (
+                    <Card key={discussion.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback>{discussion.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant={getCategoryColor(discussion.category) as any} className="gap-1">
+                                {getCategoryIcon(discussion.category)}
+                                {discussion.category}
+                              </Badge>
+                              {discussion.solved && (
+                                <Badge variant="outline" className="gap-1 border-green-500 text-green-600">
+                                  ✓ Solved
+                                </Badge>
+                              )}
+                            </div>
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors mb-2">
+                              {discussion.title}
+                            </CardTitle>
+                            <CardDescription>
+                              Started by {discussion.author} • {discussion.lastActive}
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <MessageSquare className="h-4 w-4" />
+                              {discussion.replies} replies
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {discussion.views} views
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {discussion.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </TabsContent>
 
-                <TabsContent value="unsolved" className="mt-6">
-                  <p className="text-center text-muted-foreground py-8">Unsolved questions will appear here</p>
+                <TabsContent value="unsolved" className="mt-6 space-y-4">
+                  {filteredDiscussions
+                    .filter(d => !d.solved)
+                    .map((discussion) => (
+                    <Card key={discussion.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
+                      <CardHeader>
+                        <div className="flex items-start gap-4">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback>{discussion.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant={getCategoryColor(discussion.category) as any} className="gap-1">
+                                {getCategoryIcon(discussion.category)}
+                                {discussion.category}
+                              </Badge>
+                              {discussion.solved && (
+                                <Badge variant="outline" className="gap-1 border-green-500 text-green-600">
+                                  ✓ Solved
+                                </Badge>
+                              )}
+                            </div>
+                            <CardTitle className="text-xl group-hover:text-primary transition-colors mb-2">
+                              {discussion.title}
+                            </CardTitle>
+                            <CardDescription>
+                              Started by {discussion.author} • {discussion.lastActive}
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <MessageSquare className="h-4 w-4" />
+                              {discussion.replies} replies
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {discussion.views} views
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {discussion.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </TabsContent>
               </Tabs>
             </div>
