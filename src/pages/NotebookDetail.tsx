@@ -5,12 +5,42 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Heart, MessageSquare, Eye, Download, Share2, ArrowLeft } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Heart, MessageSquare, Eye, Download, Share2, ArrowLeft, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const NotebookDetail = () => {
   const { id } = useParams();
   const { toast } = useToast();
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState([
+    {
+      id: "1",
+      author: "Ama Kofi",
+      avatar: "",
+      content: "Great tutorial! The explanations are very clear and the code examples are practical.",
+      timestamp: "2 hours ago",
+      likes: 12
+    },
+    {
+      id: "2",
+      author: "Kwesi Boateng",
+      avatar: "",
+      content: "I implemented this in my project and it worked perfectly. Thanks for sharing!",
+      timestamp: "5 hours ago",
+      likes: 8
+    },
+    {
+      id: "3",
+      author: "Abena Mensah",
+      avatar: "",
+      content: "Could you add more examples on handling edge cases? Otherwise, excellent work!",
+      timestamp: "1 day ago",
+      likes: 5
+    }
+  ]);
 
   // Course content database
   const notebookContent: Record<string, any> = {
@@ -1404,6 +1434,34 @@ class PolicyGradientAgent:
     });
   };
 
+  const handlePostComment = () => {
+    if (!commentText.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a comment",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newComment = {
+      id: String(comments.length + 1),
+      author: "Current User",
+      avatar: "",
+      content: commentText,
+      timestamp: "Just now",
+      likes: 0
+    };
+
+    setComments([newComment, ...comments]);
+    setCommentText("");
+    
+    toast({
+      title: "Comment posted",
+      description: "Your comment has been added successfully",
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -1477,12 +1535,56 @@ class PolicyGradientAgent:
 
             <Card>
               <CardHeader>
-                <CardTitle>Comments ({notebook.comments})</CardTitle>
+                <CardTitle>Comments ({comments.length})</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground text-center py-8">
-                  Comments will appear here
-                </p>
+              <CardContent className="space-y-6">
+                {/* Comment form */}
+                <div className="space-y-3">
+                  <Textarea
+                    placeholder="Share your thoughts about this notebook..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    className="min-h-[100px]"
+                  />
+                  <div className="flex justify-end">
+                    <Button onClick={handlePostComment}>
+                      <Send className="h-4 w-4 mr-2" />
+                      Post Comment
+                    </Button>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Comments list */}
+                <div className="space-y-6">
+                  {comments.map((comment) => (
+                    <div key={comment.id} className="flex gap-4">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={comment.avatar} />
+                        <AvatarFallback>{comment.author.substring(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-semibold text-sm">{comment.author}</p>
+                            <p className="text-xs text-muted-foreground">{comment.timestamp}</p>
+                          </div>
+                        </div>
+                        <p className="text-sm text-foreground">{comment.content}</p>
+                        <div className="flex items-center gap-4">
+                          <Button variant="ghost" size="sm" className="h-8 px-2">
+                            <Heart className="h-3 w-3 mr-1" />
+                            <span className="text-xs">{comment.likes}</span>
+                          </Button>
+                          <Button variant="ghost" size="sm" className="h-8 px-2 text-xs">
+                            Reply
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>
