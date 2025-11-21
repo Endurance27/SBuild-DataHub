@@ -14,7 +14,7 @@ const Navbar = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
               <Database className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-foreground">Sbuild DataHub</span>
+            <span className="text-xl font-bold text-foreground">SBuild DataHub</span>
           </Link>
 
           {/* Desktop Navigation */}

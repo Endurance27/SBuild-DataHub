@@ -12,7 +12,7 @@ const Footer = () => {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                 <Database className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">Sbuild DataHub</span>
+              <span className="text-xl font-bold">SBuild DataHub</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Open Data for a Smarter Ghana
@@ -118,7 +118,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Sbuild DataHub. All rights reserved.
+              © {new Date().getFullYear()} SBuild DataHub. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground">
               Built with ❤️ for Ghana

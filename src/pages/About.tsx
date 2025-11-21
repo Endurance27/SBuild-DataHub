@@ -59,7 +59,7 @@ const About = () => {
   ];
 
   const milestones = [
-    { year: "2021", event: "Platform Launch", description: "Sbuild DataHub officially launched with 100 datasets" },
+    { year: "2021", event: "Platform Launch", description: "SBuild DataHub officially launched with 100 datasets" },
     { year: "2022", event: "1,000 Datasets", description: "Reached our first major milestone of 1,000 curated datasets" },
     { year: "2023", event: "Competition Platform", description: "Launched data science competitions with GH₵500,000 in prizes" },
     { year: "2024", event: "10,000+ Datasets", description: "Now the largest open data repository in West Africa" }
@@ -78,7 +78,7 @@ const About = () => {
                 Empowering Ghana Through Open Data
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Sbuild DataHub is Ghana's premier open data platform, connecting researchers, data scientists, 
+                SBuild DataHub is Ghana's premier open data platform, connecting researchers, data scientists, 
                 and organizations with high-quality datasets to drive innovation and social impact.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
@@ -157,7 +157,7 @@ const About = () => {
               <h2 className="text-4xl font-bold mb-8 text-center">Our Story</h2>
               <div className="prose prose-lg max-w-none">
                 <p className="text-muted-foreground mb-6">
-                  Sbuild DataHub was born from a simple observation: Ghana has a wealth of valuable data, 
+                  SBuild DataHub was born from a simple observation: Ghana has a wealth of valuable data, 
                   but it was scattered, inaccessible, and underutilized. In 2021, a group of data scientists, 
                   researchers, and civic technologists came together with a vision to change this.
                 </p>
@@ -167,7 +167,7 @@ const About = () => {
                   platform, with over 10,000 datasets and a thriving community of 15,000+ users.
                 </p>
                 <p className="text-muted-foreground">
-                  Today, Sbuild DataHub powers research at universities, informs policy decisions in government, 
+                  Today, SBuild DataHub powers research at universities, informs policy decisions in government, 
                   and enables data scientists to compete in solving real-world challenges. Our platform has 
                   become the go-to resource for anyone working with Ghanaian data.
                 </p>

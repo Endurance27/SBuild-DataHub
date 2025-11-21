@@ -24,7 +24,7 @@ const Login = () => {
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
               <Database className="h-7 w-7 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold">Sbuild DataHub</span>
+            <span className="text-2xl font-bold">SBuild DataHub</span>
           </Link>
         </div>
 
