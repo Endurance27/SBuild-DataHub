@@ -238,7 +238,7 @@ const About = () => {
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-4xl font-bold mb-4">Our Partners</h2>
               <p className="text-muted-foreground mb-8">
-                We collaborate with leading organizations to bring you the best data
+                We collaborate with organizations that share our goal to share data for research
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
                 {["Ghana Statistical Service", "Ministry of Agriculture", "Ghana Health Service", "Bank of Ghana", 
