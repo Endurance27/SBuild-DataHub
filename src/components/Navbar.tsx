@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Database, Menu, X } from "lucide-react";
+import { Database, Menu, X, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useTheme } from "@/hooks/use-theme";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
