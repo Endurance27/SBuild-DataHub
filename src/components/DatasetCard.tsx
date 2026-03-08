@@ -5,6 +5,28 @@ import { Download, Calendar, Database } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
+import imgCensus from "@/assets/dataset-census.jpg";
+import imgEconomics from "@/assets/dataset-economics.jpg";
+import imgHealthcare from "@/assets/dataset-healthcare.jpg";
+import imgEducation from "@/assets/dataset-education.jpg";
+import imgAgriculture from "@/assets/dataset-agriculture.jpg";
+import imgTransport from "@/assets/dataset-transport.jpg";
+import imgClimate from "@/assets/dataset-climate.jpg";
+import imgFintech from "@/assets/dataset-fintech.jpg";
+import imgRealestate from "@/assets/dataset-realestate.jpg";
+
+const imageMap: Record<string, string> = {
+  "1": imgCensus,
+  "2": imgEconomics,
+  "3": imgHealthcare,
+  "4": imgEducation,
+  "5": imgAgriculture,
+  "6": imgTransport,
+  "7": imgClimate,
+  "8": imgFintech,
+  "9": imgRealestate,
+};
+
 interface DatasetCardProps {
   id: string;
   title: string;
@@ -27,7 +49,6 @@ const DatasetCard = ({ id, title, description, tags, downloads, uploadDate, file
       description: `Downloading ${title}...`,
     });
 
-    // Simulate file download
     setTimeout(() => {
       const blob = new Blob(['Sample CSV Data'], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
@@ -41,11 +62,29 @@ const DatasetCard = ({ id, title, description, tags, downloads, uploadDate, file
     }, 1000);
   };
 
+  const coverImage = imageMap[id] || imgCensus;
+
   return (
-    <Card className="h-full transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] group flex flex-col">
+    <Card className="h-full transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] group flex flex-col overflow-hidden">
       <Link to={`/dataset/${id}`} className="flex-1 flex flex-col">
-        <CardHeader>
-          <CardTitle className="text-lg group-hover:text-primary transition-colors">
+        <div className="relative h-40 overflow-hidden">
+          <img
+            src={coverImage}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+          <div className="absolute bottom-2 left-3 flex gap-1.5">
+            {tags.slice(0, 2).map((tag) => (
+              <Badge key={tag} variant="secondary" className="text-[10px] backdrop-blur-sm bg-secondary/80">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg group-hover:text-primary transition-colors line-clamp-1">
             {title}
           </CardTitle>
           <CardDescription className="line-clamp-2">
@@ -54,16 +93,11 @@ const DatasetCard = ({ id, title, description, tags, downloads, uploadDate, file
         </CardHeader>
         <CardContent className="flex-1">
           <div className="flex flex-wrap gap-2">
-            {tags.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+            {tags.slice(2).map((tag) => (
+              <Badge key={tag} variant="outline" className="text-xs">
                 {tag}
               </Badge>
             ))}
-            {tags.length > 3 && (
-              <Badge variant="outline" className="text-xs">
-                +{tags.length - 3} more
-              </Badge>
-            )}
           </div>
         </CardContent>
       </Link>
