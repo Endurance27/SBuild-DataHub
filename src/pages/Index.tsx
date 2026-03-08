@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import DatasetCard from "@/components/DatasetCard";
+import AIRecommendations from "@/components/AIRecommendations";
+import AchievementSystem from "@/components/AchievementSystem";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Users, Database, Award } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -136,6 +138,12 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* AI Recommendations */}
+      <AIRecommendations />
+
+      {/* Achievement System */}
+      <AchievementSystem />
 
       {/* CTA Section */}
       <section className="py-16 bg-primary text-primary-foreground">
