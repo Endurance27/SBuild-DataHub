@@ -41,7 +41,15 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            >
+              {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
             <Link to="/login">
               <Button variant="ghost">Sign In</Button>
             </Link>
@@ -87,6 +95,10 @@ const Navbar = () => {
                 About
               </Link>
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
+                <Button variant="ghost" onClick={toggleTheme} className="w-full justify-start gap-2">
+                  {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                  {theme === "light" ? "Dark Mode" : "Light Mode"}
+                </Button>
                 <Link to="/login">
                   <Button variant="ghost" className="w-full">Sign In</Button>
                 </Link>
