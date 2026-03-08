@@ -125,6 +125,9 @@ const Notebooks = () => {
     notebook.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
+  const recentNotebooks = [...filteredNotebooks].sort((a, b) => parseInt(b.id) - parseInt(a.id));
+  const mostVotedNotebooks = [...filteredNotebooks].sort((a, b) => b.votes - a.votes);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -167,7 +170,6 @@ const Notebooks = () => {
         <section className="py-12" ref={tutorialsRef}>
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto space-y-6">
-              {/* Search */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -209,11 +211,19 @@ const Notebooks = () => {
                 </TabsContent>
 
                 <TabsContent value="recent" className="mt-6">
-                  <p className="text-center text-muted-foreground py-8">Recent notebooks will appear here</p>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {recentNotebooks.map((notebook) => (
+                      <NotebookCard key={notebook.id} notebook={notebook} />
+                    ))}
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="votes" className="mt-6">
-                  <p className="text-center text-muted-foreground py-8">Most voted notebooks will appear here</p>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {mostVotedNotebooks.map((notebook) => (
+                      <NotebookCard key={notebook.id} notebook={notebook} />
+                    ))}
+                  </div>
                 </TabsContent>
               </Tabs>
             </div>

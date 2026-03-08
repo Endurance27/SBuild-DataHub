@@ -7,6 +7,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Trophy, Users, Clock, DollarSign, TrendingUp, Award, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import imgAgriculture from "@/assets/comp-agriculture.jpg";
+import imgHealthcare from "@/assets/comp-healthcare.jpg";
+import imgTraffic from "@/assets/comp-traffic.jpg";
+import imgEducation from "@/assets/comp-education.jpg";
+
+const compImages: Record<string, string> = {
+  "1": imgAgriculture,
+  "2": imgHealthcare,
+  "3": imgTraffic,
+  "4": imgEducation,
+};
+
 const Competitions = () => {
   const activeCompetitions = [
     {
@@ -83,6 +95,29 @@ const Competitions = () => {
       participants: 234,
       completed: "2024-01-28",
       tags: ["Energy", "Forecasting", "Infrastructure"]
+    }
+  ];
+
+  const upcomingCompetitions = [
+    {
+      id: "7",
+      title: "Water Quality Monitoring Challenge",
+      description: "Use sensor data and satellite imagery to predict water quality across Ghana's rivers and reservoirs.",
+      organization: "Water Resources Commission",
+      prize: "GH₵35,000",
+      startsIn: 14,
+      tags: ["Environment", "Sensor Data", "Classification"],
+      difficulty: "Intermediate",
+    },
+    {
+      id: "8",
+      title: "Ghana Tourism Data Challenge",
+      description: "Analyze tourism patterns and predict visitor trends to help plan infrastructure development.",
+      organization: "Ghana Tourism Authority",
+      prize: "GH₵25,000",
+      startsIn: 28,
+      tags: ["Tourism", "Time Series", "Economics"],
+      difficulty: "Beginner",
     }
   ];
 
@@ -175,14 +210,24 @@ const Competitions = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {activeCompetitions.map((competition) => (
-                    <Card key={competition.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                      <CardHeader>
-                        <div className="flex items-start justify-between mb-2">
-                          <Badge variant="secondary">{competition.category}</Badge>
-                          <Badge variant={competition.difficulty === "Beginner" ? "default" : competition.difficulty === "Intermediate" ? "secondary" : "destructive"}>
+                    <Card key={competition.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden">
+                      <div className="relative h-40 overflow-hidden">
+                        <img
+                          src={compImages[competition.id] || imgAgriculture}
+                          alt={competition.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                        <div className="absolute bottom-2 left-3 flex gap-1.5">
+                          <Badge variant="secondary" className="backdrop-blur-sm bg-secondary/80">{competition.category}</Badge>
+                          <Badge variant={competition.difficulty === "Beginner" ? "default" : competition.difficulty === "Intermediate" ? "secondary" : "destructive"} className="backdrop-blur-sm">
                             {competition.difficulty}
                           </Badge>
                         </div>
+                      </div>
+
+                      <CardHeader className="pb-2">
                         <CardTitle className="text-xl group-hover:text-primary transition-colors">
                           {competition.title}
                         </CardTitle>
@@ -308,15 +353,60 @@ const Competitions = () => {
 
               {/* Upcoming Competitions */}
               <TabsContent value="upcoming" className="mt-0">
-                <div className="text-center py-12">
-                  <Calendar className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-xl font-semibold mb-2">No Upcoming Competitions</h3>
-                  <p className="text-muted-foreground mb-6">
-                    Check back soon for new challenges or host your own competition
+                <div className="mb-6">
+                  <p className="text-muted-foreground">
+                    <span className="font-semibold text-foreground">{upcomingCompetitions.length}</span> upcoming competitions
                   </p>
-                  <Link to="/host-competition">
-                    <Button>Host a Competition</Button>
-                  </Link>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {upcomingCompetitions.map((competition) => (
+                    <Card key={competition.id} className="hover:shadow-lg transition-all duration-300">
+                      <CardHeader>
+                        <div className="flex items-start justify-between mb-2">
+                          <Badge variant="outline">Upcoming</Badge>
+                          <Badge variant={competition.difficulty === "Beginner" ? "default" : "secondary"}>
+                            {competition.difficulty}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-xl">
+                          {competition.title}
+                        </CardTitle>
+                        <CardDescription className="line-clamp-2">
+                          {competition.description}
+                        </CardDescription>
+                      </CardHeader>
+                      
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Organized by:</span>
+                            <span className="font-medium">{competition.organization}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Prize:</span>
+                            <span className="font-bold text-secondary">{competition.prize}</span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">Starts in:</span>
+                            <span className="font-bold text-accent">{competition.startsIn} days</span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 pt-2">
+                            {competition.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+
+                      <CardFooter>
+                        <Button variant="outline" className="w-full">Notify Me When It Starts</Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
                 </div>
               </TabsContent>
             </Tabs>
@@ -332,7 +422,7 @@ const Competitions = () => {
                 Join thousands of data scientists solving real problems and making impact in Ghana
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/competitions/1">
+                <Link to="/competition/1">
                   <Button size="lg">Join Your First Competition</Button>
                 </Link>
                 <Button size="lg" variant="outline">Learn How It Works</Button>

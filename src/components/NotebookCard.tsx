@@ -4,6 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Eye, Heart, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import imgMl from "@/assets/notebook-ml.jpg";
+import imgDl from "@/assets/notebook-dl.jpg";
+import imgDs from "@/assets/notebook-ds.jpg";
+import imgNlp from "@/assets/notebook-nlp.jpg";
+import imgCv from "@/assets/notebook-cv.jpg";
+import imgStats from "@/assets/notebook-stats.jpg";
+import imgTimeseries from "@/assets/notebook-timeseries.jpg";
+import imgRl from "@/assets/notebook-rl.jpg";
+
+const imageMap: Record<string, string> = {
+  "1": imgMl,
+  "2": imgDl,
+  "3": imgDs,
+  "4": imgNlp,
+  "5": imgCv,
+  "6": imgStats,
+  "7": imgTimeseries,
+  "8": imgRl,
+};
+
 interface NotebookCardProps {
   notebook: {
     id: string;
@@ -21,20 +41,34 @@ interface NotebookCardProps {
 }
 
 const NotebookCard = ({ notebook, showBorder = false }: NotebookCardProps) => {
+  const coverImage = imageMap[notebook.id] || imgMl;
+
   return (
     <Card 
-      className={`hover:shadow-lg transition-all duration-300 cursor-pointer group ${
+      className={`hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden ${
         showBorder ? 'border-primary' : ''
       }`}
     >
-      <CardHeader>
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex gap-2">
-            <Badge variant="secondary">{notebook.language}</Badge>
-            {notebook.featured && <Badge variant="default">Featured</Badge>}
-          </div>
+      <div className="relative h-36 overflow-hidden">
+        <img
+          src={coverImage}
+          alt={notebook.title}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+        <div className="absolute bottom-2 left-3 flex gap-1.5">
+          <Badge variant="secondary" className="text-[10px] backdrop-blur-sm bg-secondary/80">
+            {notebook.language}
+          </Badge>
+          {notebook.featured && (
+            <Badge variant="default" className="text-[10px] backdrop-blur-sm">Featured</Badge>
+          )}
         </div>
-        <CardTitle className="text-xl group-hover:text-primary transition-colors">
+      </div>
+
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-1">
           {notebook.title}
         </CardTitle>
         <CardDescription className="line-clamp-2">
