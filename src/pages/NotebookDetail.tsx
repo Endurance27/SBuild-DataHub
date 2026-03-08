@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CollaborationIndicator from "@/components/CollaborationIndicator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1782,6 +1783,11 @@ class PolicyGradientAgent:
                   ))}
                 </div>
               </CardHeader>
+
+              {/* Real-time Collaboration */}
+              <div className="px-6 pb-4">
+                <CollaborationIndicator />
+              </div>
 
               <Separator />
 

@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import InteractiveDataPreview from "@/components/InteractiveDataPreview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -159,36 +160,7 @@ const DatasetDetail = () => {
                 </TabsList>
 
                 <TabsContent value="data" className="mt-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Sample Data</CardTitle>
-                      <CardDescription>First 5 rows of the dataset</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                          <thead>
-                            <tr className="border-b border-border">
-                              <th className="text-left p-3 font-medium">Region</th>
-                              <th className="text-left p-3 font-medium">Population</th>
-                              <th className="text-left p-3 font-medium">Households</th>
-                              <th className="text-left p-3 font-medium">Avg Age</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {sampleData.map((row, idx) => (
-                              <tr key={idx} className="border-b border-border">
-                                <td className="p-3">{row.region}</td>
-                                <td className="p-3">{row.population.toLocaleString()}</td>
-                                <td className="p-3">{row.households.toLocaleString()}</td>
-                                <td className="p-3">{row.avg_age}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <InteractiveDataPreview />
                 </TabsContent>
 
                 <TabsContent value="details" className="mt-6">
