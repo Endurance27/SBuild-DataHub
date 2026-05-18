@@ -20,6 +20,15 @@ import DatasetDetail from "./pages/DatasetDetail";
 import NotFound from "./pages/NotFound";
 import HostCompetition from "./pages/HostCompetition";
 import CreateNotebook from "./pages/CreateNotebook";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminContent from "./pages/admin/AdminContent";
+import AdminCompetitions from "./pages/admin/AdminCompetitions";
+import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
+import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
+import AdminSettings from "./pages/admin/AdminSettings";
+import { AuthProvider } from "./hooks/use-auth";
 
 const queryClient = new QueryClient();
 
