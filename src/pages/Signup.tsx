@@ -4,8 +4,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Database } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -16,11 +18,30 @@ const Signup = () => {
     role: "",
     customRole: ""
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement signup logic
-    console.log("Signup:", formData);
+    if (formData.password !== formData.confirmPassword) {
+      return toast.error("Passwords do not match");
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/`,
+        data: {
+          display_name: formData.fullName,
+          signup_role: formData.role === "other" ? formData.customRole : formData.role,
+        },
+      },
+    });
+    setLoading(false);
+    if (error) return toast.error(error.message);
+    toast.success("Account created! Check your email to verify.");
+    navigate("/login");
   };
 
   return (
@@ -116,8 +137,8 @@ const Signup = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full">
-                Create Account
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Creating..." : "Create Account"}
               </Button>
               <p className="text-sm text-muted-foreground text-center">
                 Already have an account?{" "}

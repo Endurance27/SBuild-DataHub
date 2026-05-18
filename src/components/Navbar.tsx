@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Database, Menu, X, Moon, Sun } from "lucide-react";
+import { Database, Menu, X, Moon, Sun, Shield, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
+import { useAuth } from "@/hooks/use-auth";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { user, isAdmin, signOut } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -50,12 +52,23 @@ const Navbar = () => {
             >
               {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
-            <Link to="/login">
-              <Button variant="ghost">Sign In</Button>
-            </Link>
-            <Link to="/signup">
-              <Button>Get Started</Button>
-            </Link>
+            {isAdmin && (
+              <Link to="/admin">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Shield className="h-4 w-4" /> Admin
+                </Button>
+              </Link>
+            )}
+            {user ? (
+              <Button variant="ghost" onClick={signOut} className="gap-2">
+                <LogOut className="h-4 w-4" /> Sign Out
+              </Button>
+            ) : (
+              <>
+                <Link to="/login"><Button variant="ghost">Sign In</Button></Link>
+                <Link to="/signup"><Button>Get Started</Button></Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
