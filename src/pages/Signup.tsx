@@ -137,8 +137,8 @@ const Signup = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full">
-                Create Account
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Creating..." : "Create Account"}
               </Button>
               <p className="text-sm text-muted-foreground text-center">
                 Already have an account?{" "}
