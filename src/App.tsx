@@ -38,26 +38,37 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/datasets" element={<Datasets />} />
-          <Route path="/dataset/:id" element={<DatasetDetail />} />
-          <Route path="/upload" element={<UploadDataset />} />
-          <Route path="/competitions" element={<Competitions />} />
-          <Route path="/competition/:id" element={<CompetitionDetail />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/notebooks" element={<Notebooks />} />
-          <Route path="/notebooks/:id" element={<NotebookDetail />} />
-          <Route path="/notebooks/create" element={<CreateNotebook />} />
-          <Route path="/discussions" element={<Discussions />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/host-competition" element={<HostCompetition />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/datasets" element={<Datasets />} />
+            <Route path="/dataset/:id" element={<DatasetDetail />} />
+            <Route path="/upload" element={<UploadDataset />} />
+            <Route path="/competitions" element={<Competitions />} />
+            <Route path="/competition/:id" element={<CompetitionDetail />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/notebooks" element={<Notebooks />} />
+            <Route path="/notebooks/:id" element={<NotebookDetail />} />
+            <Route path="/notebooks/create" element={<CreateNotebook />} />
+            <Route path="/discussions" element={<Discussions />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/host-competition" element={<HostCompetition />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="content" element={<AdminContent />} />
+              <Route path="competitions" element={<AdminCompetitions />} />
+              <Route path="announcements" element={<AdminAnnouncements />} />
+              <Route path="audit" element={<AdminAuditLogs />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
