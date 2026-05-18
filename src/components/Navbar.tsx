@@ -52,12 +52,23 @@ const Navbar = () => {
             >
               {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             </Button>
-            <Link to="/login">
-              <Button variant="ghost">Sign In</Button>
-            </Link>
-            <Link to="/signup">
-              <Button>Get Started</Button>
-            </Link>
+            {isAdmin && (
+              <Link to="/admin">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Shield className="h-4 w-4" /> Admin
+                </Button>
+              </Link>
+            )}
+            {user ? (
+              <Button variant="ghost" onClick={signOut} className="gap-2">
+                <LogOut className="h-4 w-4" /> Sign Out
+              </Button>
+            ) : (
+              <>
+                <Link to="/login"><Button variant="ghost">Sign In</Button></Link>
+                <Link to="/signup"><Button>Get Started</Button></Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
