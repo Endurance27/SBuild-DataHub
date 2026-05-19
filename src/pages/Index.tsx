@@ -153,9 +153,9 @@ const Index = () => {
             Join Ghana's growing community of researchers, developers, and data enthusiasts
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Link to="/signup">
+            <Link to="/explore">
               <Button size="lg" variant="secondary" className="text-base px-8">
-                Create Account
+                Explore Datasets
               </Button>
             </Link>
             <Link to="/about">
