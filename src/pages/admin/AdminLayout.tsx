@@ -32,7 +32,7 @@ const AdminLayout = () => {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) navigate("/login");
+    if (!user) navigate("/");
     else if (!isAdmin) navigate("/");
   }, [user, isAdmin, loading, navigate]);
 
