@@ -64,10 +64,7 @@ const Navbar = () => {
                 <LogOut className="h-4 w-4" /> Sign Out
               </Button>
             ) : (
-              <>
-                <Link to="/login"><Button variant="ghost">Sign In</Button></Link>
-                <Link to="/signup"><Button>Get Started</Button></Link>
-              </>
+              <Link to="/login"><Button>Sign In</Button></Link>
             )}
           </div>
 
@@ -113,10 +110,7 @@ const Navbar = () => {
                   {theme === "light" ? "Dark Mode" : "Light Mode"}
                 </Button>
                 <Link to="/login">
-                  <Button variant="ghost" className="w-full">Sign In</Button>
-                </Link>
-                <Link to="/signup">
-                  <Button className="w-full">Get Started</Button>
+                  <Button className="w-full">Sign In</Button>
                 </Link>
               </div>
             </div>
