@@ -50,7 +50,6 @@ const AdminDashboard = () => {
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">
           <p>From here you can manage users, content, competitions, announcements, and review audit logs.</p>
-          <p>The first user to sign up is automatically granted admin privileges.</p>
         </CardContent>
       </Card>
     </div>

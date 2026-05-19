@@ -56,9 +56,8 @@ const Login = () => {
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
-              <p className="text-sm text-muted-foreground text-center">
-                Don't have an account?{" "}
-                <Link to="/signup" className="text-primary hover:underline font-medium">Sign up</Link>
+              <p className="text-xs text-muted-foreground text-center">
+                Accounts are created by an administrator. Contact your admin for access.
               </p>
             </CardFooter>
           </form>
