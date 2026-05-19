@@ -1,34 +1,50 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
+  Database,
+  Upload,
   Users,
-  FileText,
-  Trophy,
-  Megaphone,
+  ShieldCheck,
+  BarChart3,
   ScrollText,
   Settings,
   Shield,
   LogOut,
   Home,
+  Search,
+  Bell,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/admin/users", label: "Users & Roles", icon: Users },
-  { to: "/admin/content", label: "Datasets & Notebooks", icon: FileText },
-  { to: "/admin/competitions", label: "Competitions", icon: Trophy },
-  { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
-  { to: "/admin/audit", label: "Audit Logs", icon: ScrollText },
+  { to: "/admin/datasets", label: "Datasets", icon: Database },
+  { to: "/admin/uploads", label: "Data Uploads", icon: Upload },
+  { to: "/admin/users", label: "Users", icon: Users },
+  { to: "/admin/access", label: "Access Control", icon: ShieldCheck },
+  { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/admin/logs", label: "Logs", icon: ScrollText },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 const AdminLayout = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     if (loading) return;
@@ -43,6 +59,8 @@ const AdminLayout = () => {
       </div>
     );
   }
+
+  const initials = (user.email ?? "A").slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen flex bg-muted/20">
@@ -92,9 +110,72 @@ const AdminLayout = () => {
           </Button>
         </div>
       </aside>
-      <main className="flex-1 p-8 overflow-auto">
-        <Outlet />
-      </main>
+
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="h-16 border-b border-border bg-background/80 backdrop-blur flex items-center gap-4 px-6">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search datasets, users, logs…"
+              className="pl-9"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-accent" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-72">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="flex flex-col items-start gap-1">
+                  <span className="text-sm">New dataset awaiting review</span>
+                  <span className="text-xs text-muted-foreground">2 minutes ago</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex flex-col items-start gap-1">
+                  <span className="text-sm">Storage usage above 70%</span>
+                  <span className="text-xs text-muted-foreground">1 hour ago</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-accent transition-colors">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="hidden sm:flex flex-col items-start">
+                    <span className="text-xs font-medium leading-tight">{user.email}</span>
+                    <Badge variant="outline" className="text-[10px] h-4 px-1 mt-0.5">Admin</Badge>
+                  </div>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/")}>
+                  <Home className="h-4 w-4 mr-2" /> Back to site
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={async () => { await signOut(); navigate("/"); }}>
+                  <LogOut className="h-4 w-4 mr-2" /> Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </header>
+
+        <main className="flex-1 p-8 overflow-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

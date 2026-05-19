@@ -23,9 +23,10 @@ import CreateNotebook from "./pages/CreateNotebook";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
-import AdminContent from "./pages/admin/AdminContent";
-import AdminCompetitions from "./pages/admin/AdminCompetitions";
-import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
+import AdminDatasets from "./pages/admin/AdminDatasets";
+import AdminUploads from "./pages/admin/AdminUploads";
+import AdminAccessControl from "./pages/admin/AdminAccessControl";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminSettings from "./pages/admin/AdminSettings";
 import { AuthProvider } from "./hooks/use-auth";
@@ -58,11 +59,12 @@ const App = () => (
             <Route path="/host-competition" element={<HostCompetition />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+              <Route path="datasets" element={<AdminDatasets />} />
+              <Route path="uploads" element={<AdminUploads />} />
               <Route path="users" element={<AdminUsers />} />
-              <Route path="content" element={<AdminContent />} />
-              <Route path="competitions" element={<AdminCompetitions />} />
-              <Route path="announcements" element={<AdminAnnouncements />} />
-              <Route path="audit" element={<AdminAuditLogs />} />
+              <Route path="access" element={<AdminAccessControl />} />
+              <Route path="analytics" element={<AdminAnalytics />} />
+              <Route path="logs" element={<AdminAuditLogs />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
