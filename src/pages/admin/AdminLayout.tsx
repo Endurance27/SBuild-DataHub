@@ -15,6 +15,11 @@ import {
   Home,
   Search,
   Bell,
+  Trophy,
+  BookOpen,
+  MessageSquare,
+  Award,
+  Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +39,11 @@ const nav = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/datasets", label: "Datasets", icon: Database },
   { to: "/admin/uploads", label: "Data Uploads", icon: Upload },
+  { to: "/admin/notebooks", label: "Notebooks", icon: BookOpen },
+  { to: "/admin/competitions", label: "Competitions", icon: Trophy },
+  { to: "/admin/discussions", label: "Discussions", icon: MessageSquare },
+  { to: "/admin/leaderboard", label: "Leaderboard", icon: Award },
+  { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/access", label: "Access Control", icon: ShieldCheck },
   { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
