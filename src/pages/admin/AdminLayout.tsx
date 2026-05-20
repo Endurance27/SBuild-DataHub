@@ -42,25 +42,12 @@ const nav = [
 ];
 
 const AdminLayout = () => {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    if (loading) return;
-    if (!user) navigate("/");
-    else if (!isAdmin) navigate("/");
-  }, [user, isAdmin, loading, navigate]);
-
-  if (loading || !user || !isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
-        Checking permissions...
-      </div>
-    );
-  }
-
-  const initials = (user.email ?? "A").slice(0, 2).toUpperCase();
+  const displayEmail = user?.email ?? "admin@demo.local";
+  const initials = displayEmail.slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen flex bg-muted/20">
@@ -153,13 +140,13 @@ const AdminLayout = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="hidden sm:flex flex-col items-start">
-                    <span className="text-xs font-medium leading-tight">{user.email}</span>
+                    <span className="text-xs font-medium leading-tight">{displayEmail}</span>
                     <Badge variant="outline" className="text-[10px] h-4 px-1 mt-0.5">Admin</Badge>
                   </div>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+                <DropdownMenuLabel className="truncate">{displayEmail}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/")}>
                   <Home className="h-4 w-4 mr-2" /> Back to site
