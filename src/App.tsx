@@ -35,8 +35,6 @@ import AdminNotebooks from "./pages/admin/AdminNotebooks";
 import AdminDiscussions from "./pages/admin/AdminDiscussions";
 import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
 import AdminLeaderboard from "./pages/admin/AdminLeaderboard";
-import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
-import AdminSettings from "./pages/admin/AdminSettings";
 import { AuthProvider } from "./hooks/use-auth";
 
 const queryClient = new QueryClient();
