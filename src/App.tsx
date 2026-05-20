@@ -63,10 +63,16 @@ const App = () => (
             <Route path="/discussions" element={<Discussions />} />
             <Route path="/about" element={<About />} />
             <Route path="/host-competition" element={<HostCompetition />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="datasets" element={<AdminDatasets />} />
               <Route path="uploads" element={<AdminUploads />} />
+              <Route path="notebooks" element={<AdminNotebooks />} />
+              <Route path="competitions" element={<AdminCompetitions />} />
+              <Route path="discussions" element={<AdminDiscussions />} />
+              <Route path="leaderboard" element={<AdminLeaderboard />} />
+              <Route path="announcements" element={<AdminAnnouncements />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="access" element={<AdminAccessControl />} />
               <Route path="analytics" element={<AdminAnalytics />} />
