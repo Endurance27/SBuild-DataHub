@@ -140,13 +140,13 @@ const AdminLayout = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="hidden sm:flex flex-col items-start">
-                    <span className="text-xs font-medium leading-tight">{user.email}</span>
+                    <span className="text-xs font-medium leading-tight">{displayEmail}</span>
                     <Badge variant="outline" className="text-[10px] h-4 px-1 mt-0.5">Admin</Badge>
                   </div>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+                <DropdownMenuLabel className="truncate">{displayEmail}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/")}>
                   <Home className="h-4 w-4 mr-2" /> Back to site
