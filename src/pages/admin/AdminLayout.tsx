@@ -15,6 +15,11 @@ import {
   Home,
   Search,
   Bell,
+  Trophy,
+  BookOpen,
+  MessageSquare,
+  Award,
+  Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +39,11 @@ const nav = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/datasets", label: "Datasets", icon: Database },
   { to: "/admin/uploads", label: "Data Uploads", icon: Upload },
+  { to: "/admin/notebooks", label: "Notebooks", icon: BookOpen },
+  { to: "/admin/competitions", label: "Competitions", icon: Trophy },
+  { to: "/admin/discussions", label: "Discussions", icon: MessageSquare },
+  { to: "/admin/leaderboard", label: "Leaderboard", icon: Award },
+  { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/access", label: "Access Control", icon: ShieldCheck },
   { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
@@ -42,11 +52,24 @@ const nav = [
 ];
 
 const AdminLayout = () => {
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  const displayEmail = user?.email ?? "admin@demo.local";
+  useEffect(() => {
+    if (loading) return;
+    if (!user || !isAdmin) navigate("/admin/login");
+  }, [user, isAdmin, loading, navigate]);
+
+  if (loading || !user || !isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        Checking permissions…
+      </div>
+    );
+  }
+
+  const displayEmail = user.email ?? "admin";
   const initials = displayEmail.slice(0, 2).toUpperCase();
 
   return (

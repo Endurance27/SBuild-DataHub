@@ -21,6 +21,7 @@ import NotFound from "./pages/NotFound";
 import HostCompetition from "./pages/HostCompetition";
 import CreateNotebook from "./pages/CreateNotebook";
 import AdminLayout from "./pages/admin/AdminLayout";
+import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminDatasets from "./pages/admin/AdminDatasets";
@@ -29,6 +30,11 @@ import AdminAccessControl from "./pages/admin/AdminAccessControl";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminAuditLogs from "./pages/admin/AdminAuditLogs";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminCompetitions from "./pages/admin/AdminCompetitions";
+import AdminNotebooks from "./pages/admin/AdminNotebooks";
+import AdminDiscussions from "./pages/admin/AdminDiscussions";
+import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
+import AdminLeaderboard from "./pages/admin/AdminLeaderboard";
 import { AuthProvider } from "./hooks/use-auth";
 
 const queryClient = new QueryClient();
@@ -57,10 +63,16 @@ const App = () => (
             <Route path="/discussions" element={<Discussions />} />
             <Route path="/about" element={<About />} />
             <Route path="/host-competition" element={<HostCompetition />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="datasets" element={<AdminDatasets />} />
               <Route path="uploads" element={<AdminUploads />} />
+              <Route path="notebooks" element={<AdminNotebooks />} />
+              <Route path="competitions" element={<AdminCompetitions />} />
+              <Route path="discussions" element={<AdminDiscussions />} />
+              <Route path="leaderboard" element={<AdminLeaderboard />} />
+              <Route path="announcements" element={<AdminAnnouncements />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="access" element={<AdminAccessControl />} />
               <Route path="analytics" element={<AdminAnalytics />} />
