@@ -52,11 +52,24 @@ const nav = [
 ];
 
 const AdminLayout = () => {
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  const displayEmail = user?.email ?? "admin@demo.local";
+  useEffect(() => {
+    if (loading) return;
+    if (!user || !isAdmin) navigate("/admin/login");
+  }, [user, isAdmin, loading, navigate]);
+
+  if (loading || !user || !isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        Checking permissions…
+      </div>
+    );
+  }
+
+  const displayEmail = user.email ?? "admin";
   const initials = displayEmail.slice(0, 2).toUpperCase();
 
   return (
