@@ -14,7 +14,6 @@ const AdminLogin = () => {
   const { user, isAdmin, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
@@ -25,19 +24,9 @@ const AdminLogin = () => {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        toast.success("Signed in");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
-        });
-        if (error) throw error;
-        toast.success("Account created. First user becomes admin.");
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      toast.success("Signed in");
     } catch (err: any) {
       toast.error(err.message ?? "Authentication failed");
     } finally {
@@ -53,9 +42,7 @@ const AdminLogin = () => {
             <Shield className="h-6 w-6 text-primary-foreground" />
           </div>
           <CardTitle>Admin Console</CardTitle>
-          <CardDescription>
-            {mode === "signin" ? "Sign in to manage the platform" : "Create the first admin account"}
-          </CardDescription>
+          <CardDescription>Sign in to manage the platform</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="space-y-4">
@@ -68,15 +55,8 @@ const AdminLogin = () => {
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
             </div>
             <Button type="submit" className="w-full" disabled={busy}>
-              {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create admin account"}
+              {busy ? "Please wait…" : "Sign in"}
             </Button>
-            <button
-              type="button"
-              className="w-full text-sm text-muted-foreground hover:text-foreground"
-              onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            >
-              {mode === "signin" ? "First time? Create the initial admin →" : "Already have an account? Sign in"}
-            </button>
           </form>
         </CardContent>
       </Card>
