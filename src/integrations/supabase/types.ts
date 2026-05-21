@@ -74,6 +74,175 @@ export type Database = {
         }
         Relationships: []
       }
+      badges: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      competition_submissions: {
+        Row: {
+          competition_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          score: number | null
+          user_id: string
+        }
+        Insert: {
+          competition_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: number | null
+          user_id: string
+        }
+        Update: {
+          competition_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competition_submissions_competition_id_fkey"
+            columns: ["competition_id"]
+            isOneToOne: false
+            referencedRelation: "competitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      competitions: {
+        Row: {
+          created_at: string
+          deadline: string | null
+          description: string | null
+          host_id: string | null
+          id: string
+          prize: string | null
+          status: Database["public"]["Enums"]["competition_status"]
+          title: string
+          updated_at: string
+          winner_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          host_id?: string | null
+          id?: string
+          prize?: string | null
+          status?: Database["public"]["Enums"]["competition_status"]
+          title: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          host_id?: string | null
+          id?: string
+          prize?: string | null
+          status?: Database["public"]["Enums"]["competition_status"]
+          title?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
+      discussion_replies: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          flagged: boolean
+          id: string
+          thread_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          flagged?: boolean
+          id?: string
+          thread_id: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          flagged?: boolean
+          id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_replies_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "discussion_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discussion_threads: {
+        Row: {
+          author_id: string | null
+          body: string | null
+          category: string
+          created_at: string
+          flagged: boolean
+          id: string
+          locked: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body?: string | null
+          category?: string
+          created_at?: string
+          flagged?: boolean
+          id?: string
+          locked?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string | null
+          category?: string
+          created_at?: string
+          flagged?: boolean
+          id?: string
+          locked?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -101,6 +270,35 @@ export type Database = {
         }
         Relationships: []
       }
+      user_badges: {
+        Row: {
+          awarded_at: string
+          badge_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          badge_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          badge_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -122,6 +320,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_xp: {
+        Row: {
+          level: number
+          rank: string
+          updated_at: string
+          user_id: string
+          xp: number
+        }
+        Insert: {
+          level?: number
+          rank?: string
+          updated_at?: string
+          user_id: string
+          xp?: number
+        }
+        Update: {
+          level?: number
+          rank?: string
+          updated_at?: string
+          user_id?: string
+          xp?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -137,6 +359,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      competition_status: "draft" | "active" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -265,6 +488,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      competition_status: ["draft", "active", "closed"],
     },
   },
 } as const
