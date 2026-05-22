@@ -21,7 +21,7 @@ import NotFound from "./pages/NotFound";
 import HostCompetition from "./pages/HostCompetition";
 import CreateNotebook from "./pages/CreateNotebook";
 import AdminLayout from "./pages/admin/AdminLayout";
-import AdminLogin from "./pages/admin/AdminLogin";
+import AdminBadges from "./pages/admin/AdminBadges";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminDatasets from "./pages/admin/AdminDatasets";
@@ -63,7 +63,6 @@ const App = () => (
             <Route path="/discussions" element={<Discussions />} />
             <Route path="/about" element={<About />} />
             <Route path="/host-competition" element={<HostCompetition />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="datasets" element={<AdminDatasets />} />
@@ -72,6 +71,7 @@ const App = () => (
               <Route path="competitions" element={<AdminCompetitions />} />
               <Route path="discussions" element={<AdminDiscussions />} />
               <Route path="leaderboard" element={<AdminLeaderboard />} />
+              <Route path="badges" element={<AdminBadges />} />
               <Route path="announcements" element={<AdminAnnouncements />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="access" element={<AdminAccessControl />} />

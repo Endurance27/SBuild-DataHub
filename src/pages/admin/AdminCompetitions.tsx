@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
 } from "@/components/ui/dialog";
@@ -17,6 +18,16 @@ interface Comp {
   id: string; title: string; description: string | null; prize: string | null;
   status: "draft" | "active" | "closed"; deadline: string | null; host_id: string | null; winner_id: string | null;
   created_at: string;
+}
+
+interface Submission {
+  id: string;
+  competition_id: string;
+  user_id: string;
+  score: number | null;
+  notes: string | null;
+  created_at: string;
+  display_name?: string | null;
 }
 
 const logAction = async (action: string, target_id: string, metadata: any = {}) => {
@@ -33,7 +44,7 @@ const AdminCompetitions = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", prize: "", deadline: "" });
   const [reviewing, setReviewing] = useState<Comp | null>(null);
-  const [subs, setSubs] = useState<any[]>([]);
+  const [subs, setSubs] = useState<Submission[]>([]);
 
   const load = async () => {
     setLoading(true);
@@ -73,6 +84,7 @@ const AdminCompetitions = () => {
     if (error) return toast.error(error.message);
     await logAction(`competition.${status}`, c.id);
     toast.success(`Marked ${status}`);
+    if (reviewing?.id === c.id) setReviewing({ ...reviewing, status });
     load();
   };
 
@@ -87,7 +99,14 @@ const AdminCompetitions = () => {
   const openReview = async (c: Comp) => {
     setReviewing(c);
     const { data } = await supabase.from("competition_submissions").select("*").eq("competition_id", c.id).order("score", { ascending: false, nullsFirst: false });
-    setSubs(data ?? []);
+    const subsData = (data ?? []) as Submission[];
+    const ids = Array.from(new Set(subsData.map((s) => s.user_id)));
+    if (ids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id, display_name").in("id", ids);
+      const nameMap = new Map((profs ?? []).map((p: any) => [p.id, p.display_name]));
+      subsData.forEach((s) => { s.display_name = nameMap.get(s.user_id) ?? null; });
+    }
+    setSubs(subsData);
   };
 
   const pickWinner = async (userId: string) => {
@@ -158,12 +177,6 @@ const AdminCompetitions = () => {
                   <TableCell>{c.prize ?? "—"}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{c.deadline ? new Date(c.deadline).toLocaleDateString() : "—"}</TableCell>
                   <TableCell className="text-right space-x-1">
-                    {c.status === "draft" && (
-                      <Button size="sm" variant="ghost" onClick={() => setStatus(c, "active")}><Check className="h-4 w-4 mr-1" />Publish</Button>
-                    )}
-                    {c.status === "active" && (
-                      <Button size="sm" variant="ghost" onClick={() => setStatus(c, "closed")}><X className="h-4 w-4 mr-1" />Close</Button>
-                    )}
                     <Button size="sm" variant="ghost" onClick={() => openReview(c)}><Award className="h-4 w-4 mr-1" />Review</Button>
                     <Button size="sm" variant="ghost" onClick={() => remove(c)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                   </TableCell>
@@ -175,27 +188,80 @@ const AdminCompetitions = () => {
       </Card>
 
       <Dialog open={!!reviewing} onOpenChange={(o) => { if (!o) setReviewing(null); }}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader><DialogTitle>Submissions — {reviewing?.title}</DialogTitle></DialogHeader>
-          <div className="max-h-96 overflow-y-auto">
-            {subs.length === 0 ? <p className="text-sm text-muted-foreground py-6 text-center">No submissions yet</p> : (
-              <Table>
-                <TableHeader><TableRow><TableHead>User</TableHead><TableHead className="text-right">Score</TableHead><TableHead>Notes</TableHead><TableHead></TableHead></TableRow></TableHeader>
-                <TableBody>
-                  {subs.map((s) => (
-                    <TableRow key={s.id}>
-                      <TableCell className="font-mono text-xs">{s.user_id.slice(0, 8)}</TableCell>
-                      <TableCell className="text-right">{s.score ?? "—"}</TableCell>
-                      <TableCell className="text-sm">{s.notes ?? "—"}</TableCell>
-                      <TableCell className="text-right">
-                        <Button size="sm" variant="ghost" onClick={() => pickWinner(s.user_id)}><Award className="h-4 w-4" /></Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </div>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {reviewing?.title}
+              {reviewing && (
+                <Badge variant={reviewing.status === "active" ? "default" : reviewing.status === "draft" ? "secondary" : "outline"}>
+                  {reviewing.status}
+                </Badge>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          {reviewing && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div><span className="text-muted-foreground">Prize:</span> {reviewing.prize ?? "—"}</div>
+                <div><span className="text-muted-foreground">Deadline:</span> {reviewing.deadline ? new Date(reviewing.deadline).toLocaleString() : "—"}</div>
+              </div>
+              {reviewing.description && <p className="text-sm text-muted-foreground">{reviewing.description}</p>}
+
+              <div className="flex gap-2">
+                {reviewing.status === "draft" && (
+                  <Button size="sm" onClick={() => setStatus(reviewing, "active")}><Check className="h-4 w-4 mr-1" /> Publish</Button>
+                )}
+                {reviewing.status === "active" && (
+                  <Button size="sm" variant="outline" onClick={() => setStatus(reviewing, "closed")}><X className="h-4 w-4 mr-1" /> Close</Button>
+                )}
+                {reviewing.status === "closed" && (
+                  <Button size="sm" variant="outline" onClick={() => setStatus(reviewing, "active")}>Reopen</Button>
+                )}
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="font-semibold mb-2">Submissions ({subs.length})</h3>
+                <div className="max-h-80 overflow-y-auto rounded-md border">
+                  {subs.length === 0 ? (
+                    <p className="text-sm text-muted-foreground py-6 text-center">No submissions yet</p>
+                  ) : (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>User</TableHead>
+                          <TableHead className="text-right">Score</TableHead>
+                          <TableHead>Notes</TableHead>
+                          <TableHead>Submitted</TableHead>
+                          <TableHead className="text-right"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {subs.map((s) => (
+                          <TableRow key={s.id} className={reviewing.winner_id === s.user_id ? "bg-primary/5" : ""}>
+                            <TableCell className="font-medium">
+                              {s.display_name ?? <span className="font-mono text-xs">{s.user_id.slice(0, 8)}</span>}
+                              {reviewing.winner_id === s.user_id && <Badge className="ml-2">Winner</Badge>}
+                            </TableCell>
+                            <TableCell className="text-right">{s.score ?? "—"}</TableCell>
+                            <TableCell className="text-sm max-w-xs whitespace-pre-wrap">{s.notes ?? "—"}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell className="text-right">
+                              <Button size="sm" variant="ghost" onClick={() => pickWinner(s.user_id)} title="Pick winner">
+                                <Award className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

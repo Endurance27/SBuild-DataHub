@@ -19,6 +19,7 @@ import {
   BookOpen,
   MessageSquare,
   Award,
+  Medal,
   Megaphone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,7 @@ const nav = [
   { to: "/admin/competitions", label: "Competitions", icon: Trophy },
   { to: "/admin/discussions", label: "Discussions", icon: MessageSquare },
   { to: "/admin/leaderboard", label: "Leaderboard", icon: Award },
+  { to: "/admin/badges", label: "Badges", icon: Medal },
   { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/access", label: "Access Control", icon: ShieldCheck },
@@ -58,7 +60,7 @@ const AdminLayout = () => {
 
   useEffect(() => {
     if (loading) return;
-    if (!user || !isAdmin) navigate("/admin/login");
+    if (!user || !isAdmin) navigate("/");
   }, [user, isAdmin, loading, navigate]);
 
   if (loading || !user || !isAdmin) {

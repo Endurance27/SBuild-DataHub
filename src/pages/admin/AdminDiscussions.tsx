@@ -5,12 +5,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { MessageSquare, Search, Lock, Trash2, Flag } from "lucide-react";
 import { toast } from "sonner";
 
 interface Thread {
   id: string;
   title: string;
+  body: string | null;
   author_id: string | null;
   category: string;
   locked: boolean;
@@ -24,11 +29,15 @@ const logAction = async (action: string, target_id: string, metadata: any = {}) 
   await supabase.from("audit_logs").insert({ actor_id: user.id, action, target_type: "discussion_thread", target_id, metadata });
 };
 
+type ConfirmKind = "lock" | "flag" | "delete";
+interface Pending { kind: ConfirmKind; thread: Thread; }
+
 const AdminDiscussions = () => {
   const [items, setItems] = useState<Thread[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
+  const [pending, setPending] = useState<Pending | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -46,31 +55,71 @@ const AdminDiscussions = () => {
 
   useEffect(() => { load(); }, []);
 
-  const toggleLock = async (t: Thread) => {
-    const { error } = await supabase.from("discussion_threads").update({ locked: !t.locked }).eq("id", t.id);
-    if (error) return toast.error(error.message);
-    await logAction(t.locked ? "thread.unlock" : "thread.lock", t.id);
-    toast.success(t.locked ? "Unlocked" : "Locked");
+  const undoToggle = async (t: Thread, field: "locked" | "flagged", prev: boolean, undoAction: string) => {
+    const patch: any = { [field]: prev };
+    await supabase.from("discussion_threads").update(patch).eq("id", t.id);
+    await logAction(undoAction, t.id, { undo: true });
     load();
   };
 
-  const toggleFlag = async (t: Thread) => {
-    const { error } = await supabase.from("discussion_threads").update({ flagged: !t.flagged }).eq("id", t.id);
+  const performLock = async (t: Thread) => {
+    const next = !t.locked;
+    const { error } = await supabase.from("discussion_threads").update({ locked: next }).eq("id", t.id);
     if (error) return toast.error(error.message);
-    await logAction(t.flagged ? "thread.unflag" : "thread.flag", t.id);
-    toast.success(t.flagged ? "Flag cleared" : "Flagged");
+    await logAction(next ? "thread.lock" : "thread.unlock", t.id);
+    toast.success(next ? "Thread locked" : "Thread unlocked", {
+      action: { label: "Undo", onClick: () => undoToggle(t, "locked", t.locked, next ? "thread.unlock" : "thread.lock") },
+    });
     load();
   };
 
-  const remove = async (t: Thread) => {
+  const performFlag = async (t: Thread) => {
+    const next = !t.flagged;
+    const { error } = await supabase.from("discussion_threads").update({ flagged: next }).eq("id", t.id);
+    if (error) return toast.error(error.message);
+    await logAction(next ? "thread.flag" : "thread.unflag", t.id);
+    toast.success(next ? "Thread flagged" : "Flag cleared", {
+      action: { label: "Undo", onClick: () => undoToggle(t, "flagged", t.flagged, next ? "thread.unflag" : "thread.flag") },
+    });
+    load();
+  };
+
+  const performDelete = async (t: Thread) => {
+    const snapshot = { ...t };
     const { error } = await supabase.from("discussion_threads").delete().eq("id", t.id);
     if (error) return toast.error(error.message);
     await logAction("thread.delete", t.id, { title: t.title });
-    toast.success("Thread removed");
+    toast.success("Thread removed", {
+      action: {
+        label: "Undo",
+        onClick: async () => {
+          const { error: e } = await supabase.from("discussion_threads").insert(snapshot);
+          if (e) return toast.error(e.message);
+          await logAction("thread.restore", t.id, { undo: true });
+          toast.success("Restored");
+          load();
+        },
+      },
+    });
     load();
   };
 
+  const runPending = async () => {
+    if (!pending) return;
+    const { kind, thread } = pending;
+    setPending(null);
+    if (kind === "lock") return performLock(thread);
+    if (kind === "flag") return performFlag(thread);
+    if (kind === "delete") return performDelete(thread);
+  };
+
   const filtered = items.filter((t) => t.title.toLowerCase().includes(q.toLowerCase()));
+
+  const confirmText: Record<ConfirmKind, { title: string; desc: string; cta: string }> = {
+    lock: { title: pending?.thread.locked ? "Unlock thread?" : "Lock thread?", desc: "Locking prevents new replies until unlocked.", cta: "Continue" },
+    flag: { title: pending?.thread.flagged ? "Clear flag?" : "Flag thread?", desc: "Flagged threads are surfaced for review.", cta: "Continue" },
+    delete: { title: "Delete this thread?", desc: "This removes the thread. You can undo right after.", cta: "Delete" },
+  };
 
   return (
     <div className="space-y-6">
@@ -110,9 +159,9 @@ const AdminDiscussions = () => {
                     {t.locked && <Badge variant="outline" className="ml-1">Locked</Badge>}
                   </TableCell>
                   <TableCell className="text-right space-x-1">
-                    <Button size="sm" variant="ghost" onClick={() => toggleFlag(t)}><Flag className="h-4 w-4" /></Button>
-                    <Button size="sm" variant="ghost" onClick={() => toggleLock(t)}><Lock className="h-4 w-4" /></Button>
-                    <Button size="sm" variant="ghost" onClick={() => remove(t)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                    <Button size="sm" variant="ghost" onClick={() => setPending({ kind: "flag", thread: t })}><Flag className="h-4 w-4" /></Button>
+                    <Button size="sm" variant="ghost" onClick={() => setPending({ kind: "lock", thread: t })}><Lock className="h-4 w-4" /></Button>
+                    <Button size="sm" variant="ghost" onClick={() => setPending({ kind: "delete", thread: t })}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -120,6 +169,25 @@ const AdminDiscussions = () => {
           </Table>
         </CardContent>
       </Card>
+
+      <AlertDialog open={!!pending} onOpenChange={(o) => { if (!o) setPending(null); }}>
+        <AlertDialogContent>
+          {pending && (
+            <>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{confirmText[pending.kind].title}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  "{pending.thread.title}" — {confirmText[pending.kind].desc}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={runPending}>{confirmText[pending.kind].cta}</AlertDialogAction>
+              </AlertDialogFooter>
+            </>
+          )}
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
