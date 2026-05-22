@@ -56,7 +56,8 @@ const AdminDiscussions = () => {
   useEffect(() => { load(); }, []);
 
   const undoToggle = async (t: Thread, field: "locked" | "flagged", prev: boolean, undoAction: string) => {
-    await supabase.from("discussion_threads").update({ [field]: prev }).eq("id", t.id);
+    const patch: any = { [field]: prev };
+    await supabase.from("discussion_threads").update(patch).eq("id", t.id);
     await logAction(undoAction, t.id, { undo: true });
     load();
   };
