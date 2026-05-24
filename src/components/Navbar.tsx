@@ -59,10 +59,14 @@ const Navbar = () => {
                 </Button>
               </Link>
             )}
-            {user && (
+            {user ? (
               <Button variant="ghost" onClick={signOut} className="gap-2">
                 <LogOut className="h-4 w-4" /> Sign Out
               </Button>
+            ) : (
+              <Link to="/auth">
+                <Button size="sm">Sign In</Button>
+              </Link>
             )}
           </div>
 
