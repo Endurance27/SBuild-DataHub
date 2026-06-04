@@ -41,6 +41,7 @@ import AdminOrganizations from "./pages/admin/AdminOrganizations";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminDatasetReviews from "./pages/admin/AdminDatasetReviews";
 import AdminReports from "./pages/admin/AdminReports";
+import { AuthProvider } from "./hooks/use-auth";
 
 const queryClient = new QueryClient();
 
