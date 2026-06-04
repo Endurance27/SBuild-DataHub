@@ -36,6 +36,11 @@ import AdminNotebooks from "./pages/admin/AdminNotebooks";
 import AdminDiscussions from "./pages/admin/AdminDiscussions";
 import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
 import AdminLeaderboard from "./pages/admin/AdminLeaderboard";
+import AdminContent from "./pages/admin/AdminContent";
+import AdminOrganizations from "./pages/admin/AdminOrganizations";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminDatasetReviews from "./pages/admin/AdminDatasetReviews";
+import AdminReports from "./pages/admin/AdminReports";
 import { AuthProvider } from "./hooks/use-auth";
 
 const queryClient = new QueryClient();
@@ -70,6 +75,11 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="datasets" element={<AdminDatasets />} />
               <Route path="uploads" element={<AdminUploads />} />
+              <Route path="reviews" element={<AdminDatasetReviews />} />
+              <Route path="organizations" element={<AdminOrganizations />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="content" element={<AdminContent />} />
+              <Route path="reports" element={<AdminReports />} />
               <Route path="notebooks" element={<AdminNotebooks />} />
               <Route path="competitions" element={<AdminCompetitions />} />
               <Route path="discussions" element={<AdminDiscussions />} />

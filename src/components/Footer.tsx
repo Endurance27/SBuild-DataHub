@@ -1,7 +1,15 @@
 import { Database, Twitter, Github, Linkedin, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
+  const [brand, setBrand] = useState({ name: "SBuild DataHub", tagline: "Open Data for a Smarter Ghana", email: "info@ghdatahub.com" });
+  useEffect(() => {
+    supabase.from("site_content").select("value").eq("key", "footer_brand").maybeSingle().then(({ data }) => {
+      if (data?.value) setBrand((b) => ({ ...b, ...(data.value as any) }));
+    });
+  }, []);
   return (
     <footer className="border-t border-border bg-muted/30">
       <div className="container mx-auto px-4 py-12">
@@ -12,11 +20,9 @@ const Footer = () => {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                 <Database className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">SBuild DataHub</span>
+              <span className="text-xl font-bold">{brand.name}</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Open Data for a Smarter Ghana
-            </p>
+            <p className="text-sm text-muted-foreground">{brand.tagline}</p>
             <div className="flex gap-4">
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Twitter className="h-5 w-5" />
@@ -27,7 +33,7 @@ const Footer = () => {
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href="mailto:info@ghdatahub.com" className="text-muted-foreground hover:text-foreground transition-colors">
+              <a href={`mailto:${brand.email}`} className="text-muted-foreground hover:text-foreground transition-colors">
                 <Mail className="h-5 w-5" />
               </a>
             </div>
