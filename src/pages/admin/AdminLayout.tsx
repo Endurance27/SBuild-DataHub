@@ -44,18 +44,23 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { to: "/admin/content", label: "Content / CMS", icon: LayoutTemplate },
   { to: "/admin/datasets", label: "Datasets", icon: Database },
+  { to: "/admin/reviews", label: "Dataset Reviews", icon: FileText },
   { to: "/admin/uploads", label: "Data Uploads", icon: Upload },
   { to: "/admin/notebooks", label: "Notebooks", icon: BookOpen },
   { to: "/admin/competitions", label: "Competitions", icon: Trophy },
+  { to: "/admin/organizations", label: "Organizations", icon: Building2 },
+  { to: "/admin/categories", label: "Categories & Tags", icon: Tags },
   { to: "/admin/discussions", label: "Discussions", icon: MessageSquare },
+  { to: "/admin/reports", label: "Reports & Moderation", icon: Flag },
   { to: "/admin/leaderboard", label: "Leaderboard", icon: Award },
   { to: "/admin/badges", label: "Badges", icon: Medal },
   { to: "/admin/announcements", label: "Announcements", icon: Megaphone },
   { to: "/admin/users", label: "Users", icon: Users },
   { to: "/admin/access", label: "Access Control", icon: ShieldCheck },
   { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/admin/logs", label: "Logs", icon: ScrollText },
+  { to: "/admin/logs", label: "Audit Logs", icon: ScrollText },
   { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
