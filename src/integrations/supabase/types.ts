@@ -98,6 +98,39 @@ export type Database = {
         }
         Relationships: []
       }
+      categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       competition_submissions: {
         Row: {
           competition_id: string
@@ -172,6 +205,111 @@ export type Database = {
         }
         Relationships: []
       }
+      dataset_tags: {
+        Row: {
+          dataset_id: string
+          tag_id: string
+        }
+        Insert: {
+          dataset_id: string
+          tag_id: string
+        }
+        Update: {
+          dataset_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dataset_tags_dataset_id_fkey"
+            columns: ["dataset_id"]
+            isOneToOne: false
+            referencedRelation: "datasets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dataset_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      datasets: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          description: string | null
+          downloads: number
+          featured: boolean
+          file_size_mb: number | null
+          file_url: string | null
+          id: string
+          organization_id: string | null
+          published_at: string | null
+          reviewer_id: string | null
+          reviewer_notes: string | null
+          slug: string
+          status: Database["public"]["Enums"]["dataset_status"]
+          title: string
+          updated_at: string
+          uploader_id: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          downloads?: number
+          featured?: boolean
+          file_size_mb?: number | null
+          file_url?: string | null
+          id?: string
+          organization_id?: string | null
+          published_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["dataset_status"]
+          title: string
+          updated_at?: string
+          uploader_id?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          downloads?: number
+          featured?: boolean
+          file_size_mb?: number | null
+          file_url?: string | null
+          id?: string
+          organization_id?: string | null
+          published_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["dataset_status"]
+          title?: string
+          updated_at?: string
+          uploader_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "datasets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "datasets_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discussion_replies: {
         Row: {
           author_id: string | null
@@ -243,6 +381,42 @@ export type Database = {
         }
         Relationships: []
       }
+      organizations: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          slug: string
+          updated_at: string
+          verified: boolean
+          website: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string
+          verified?: boolean
+          website?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+          verified?: boolean
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -267,6 +441,96 @@ export type Database = {
           display_name?: string | null
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          reason: string
+          reporter_id: string | null
+          resolution_notes: string | null
+          resolved_by: string | null
+          status: string
+          target_id: string | null
+          target_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason: string
+          reporter_id?: string | null
+          resolution_notes?: string | null
+          resolved_by?: string | null
+          status?: string
+          target_id?: string | null
+          target_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason?: string
+          reporter_id?: string | null
+          resolution_notes?: string | null
+          resolved_by?: string | null
+          status?: string
+          target_id?: string | null
+          target_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
         }
         Relationships: []
       }
@@ -360,6 +624,13 @@ export type Database = {
     Enums: {
       app_role: "admin" | "moderator" | "user"
       competition_status: "draft" | "active" | "closed"
+      dataset_status:
+        | "pending"
+        | "under_review"
+        | "approved"
+        | "published"
+        | "rejected"
+        | "archived"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -489,6 +760,14 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user"],
       competition_status: ["draft", "active", "closed"],
+      dataset_status: [
+        "pending",
+        "under_review",
+        "approved",
+        "published",
+        "rejected",
+        "archived",
+      ],
     },
   },
 } as const
