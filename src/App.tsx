@@ -36,7 +36,11 @@ import AdminNotebooks from "./pages/admin/AdminNotebooks";
 import AdminDiscussions from "./pages/admin/AdminDiscussions";
 import AdminAnnouncements from "./pages/admin/AdminAnnouncements";
 import AdminLeaderboard from "./pages/admin/AdminLeaderboard";
-import { AuthProvider } from "./hooks/use-auth";
+import AdminContent from "./pages/admin/AdminContent";
+import AdminOrganizations from "./pages/admin/AdminOrganizations";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminDatasetReviews from "./pages/admin/AdminDatasetReviews";
+import AdminReports from "./pages/admin/AdminReports";
 
 const queryClient = new QueryClient();
 
