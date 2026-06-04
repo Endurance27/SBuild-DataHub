@@ -75,6 +75,11 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="datasets" element={<AdminDatasets />} />
               <Route path="uploads" element={<AdminUploads />} />
+              <Route path="reviews" element={<AdminDatasetReviews />} />
+              <Route path="organizations" element={<AdminOrganizations />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="content" element={<AdminContent />} />
+              <Route path="reports" element={<AdminReports />} />
               <Route path="notebooks" element={<AdminNotebooks />} />
               <Route path="competitions" element={<AdminCompetitions />} />
               <Route path="discussions" element={<AdminDiscussions />} />

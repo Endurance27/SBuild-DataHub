@@ -21,6 +21,12 @@ import {
   Award,
   Medal,
   Megaphone,
+  FileText,
+  Building2,
+  Tags,
+  LayoutTemplate,
+  Flag,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
