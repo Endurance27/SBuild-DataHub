@@ -86,7 +86,7 @@ const AdminLayout = () => {
   const initials = displayEmail.slice(0, 2).toUpperCase();
 
   return (
-    <div className="dark min-h-screen flex bg-slate-950 text-slate-100 font-mono">
+    <div className="admin-scope dark min-h-screen flex bg-background text-foreground font-mono">
       <aside className="w-64 border-r border-slate-800 bg-slate-900/60 flex flex-col">
         <div className="h-16 flex items-center gap-2 px-4 border-b border-slate-800">
           <div className="h-9 w-9 rounded-md bg-gradient-to-br from-indigo-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
