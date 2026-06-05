@@ -71,13 +71,37 @@ const AdminLayout = () => {
 
   useEffect(() => {
     if (loading) return;
-    if (!user || !isAdmin) navigate("/");
-  }, [user, isAdmin, loading, navigate]);
+    if (!user) navigate("/auth?redirect=/admin", { replace: true });
+  }, [user, loading, navigate]);
 
-  if (loading || !user || !isAdmin) {
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
-        Checking permissions…
+      <div className="admin-scope dark min-h-screen flex items-center justify-center bg-background text-muted-foreground font-mono text-xs uppercase tracking-[0.25em]">
+        Verifying admin session…
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
+  if (!isAdmin) {
+    return (
+      <div className="admin-scope dark min-h-screen flex items-center justify-center bg-background text-foreground font-mono p-8">
+        <div className="max-w-md w-full border border-slate-800 bg-slate-900/60 rounded-md p-8 text-center space-y-4">
+          <Shield className="h-10 w-10 mx-auto text-indigo-400" />
+          <h1 className="text-lg font-semibold tracking-tight">Admin access required</h1>
+          <p className="text-sm text-slate-400">
+            Your account ({user.email}) does not have admin privileges. Contact a platform administrator to be granted the <span className="text-indigo-300">admin</span> role.
+          </p>
+          <div className="flex gap-2 justify-center pt-2">
+            <Button variant="outline" onClick={() => navigate("/")} className="border-slate-700 text-slate-200 hover:bg-slate-800">
+              Back to site
+            </Button>
+            <Button onClick={async () => { await signOut(); navigate("/auth?redirect=/admin"); }} className="bg-indigo-600 hover:bg-indigo-500">
+              Sign in as admin
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
