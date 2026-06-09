@@ -3,6 +3,7 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 type Role = "admin" | "moderator" | "user";
+type RoleRow = { role: Role };
 
 interface AuthCtx {
   user: User | null;
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error("Unable to load user roles", error);
       return [];
     }
-    return ((data ?? []).map((r: any) => r.role)) as Role[];
+    return ((data ?? []) as RoleRow[]).map((r) => r.role);
   };
 
   useEffect(() => {
