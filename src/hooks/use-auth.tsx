@@ -3,6 +3,7 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 type Role = "admin" | "moderator" | "user";
+type RoleRow = { role: Role };
 
 interface AuthCtx {
   user: User | null;
@@ -21,9 +22,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadRoles = async (uid: string) => {
-    const { data } = await supabase.from("user_roles").select("role").eq("user_id", uid);
-    setRoles(((data ?? []).map((r: any) => r.role)) as Role[]);
+  const fetchRoles = async (uid: string): Promise<Role[]> => {
+    const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+    if (error) {
+      console.error("Unable to load user roles", error);
+      return [];
+    }
+    return ((data ?? []) as RoleRow[]).map((r) => r.role);
   };
 
   useEffect(() => {
@@ -31,16 +36,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
-        setTimeout(() => loadRoles(sess.user.id), 0);
+        setLoading(true);
+        setTimeout(async () => {
+          setRoles(await fetchRoles(sess.user.id));
+          setLoading(false);
+        }, 0);
       } else {
         setRoles([]);
+        setLoading(false);
       }
     });
 
-    supabase.auth.getSession().then(({ data: { session: sess } }) => {
+    supabase.auth.getSession().then(async ({ data: { session: sess } }) => {
       setSession(sess);
       setUser(sess?.user ?? null);
-      if (sess?.user) loadRoles(sess.user.id);
+      setRoles(sess?.user ? await fetchRoles(sess.user.id) : []);
       setLoading(false);
     });
 
