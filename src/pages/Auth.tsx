@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,10 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
-import { Database } from "lucide-react";
+import { Database, Shield } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const redirect = params.get("redirect") ?? "";
+  const adminMode = redirect.startsWith("/admin");
   const { user, isAdmin, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,8 +23,11 @@ const Auth = () => {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate(isAdmin ? "/admin" : "/");
-  }, [user, isAdmin, loading, navigate]);
+    if (!loading && user) {
+      if (redirect) navigate(redirect, { replace: true });
+      else navigate(isAdmin ? "/admin" : "/", { replace: true });
+    }
+  }, [user, isAdmin, loading, redirect, navigate]);
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
