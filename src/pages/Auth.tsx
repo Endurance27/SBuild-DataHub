@@ -90,8 +90,23 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {adminMode ? (
+            <form onSubmit={signIn} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="admin-email">Email</Label>
+                <Input id="admin-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="admin-pw">Password</Label>
+                <Input id="admin-pw" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              </div>
+              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-500" disabled={busy}>
+                {busy ? "…" : "Sign in to Admin Console"}
+              </Button>
+            </form>
+          ) : (
           <Tabs defaultValue="signin">
-            <TabsList className={cn("grid w-full grid-cols-2", adminMode && "bg-slate-950 border border-slate-800")}>
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
@@ -141,6 +156,7 @@ const Auth = () => {
               </form>
             </TabsContent>
           </Tabs>
+          )}
         </CardContent>
       </Card>
     </div>
