@@ -23,6 +23,8 @@ interface ProfileRow {
   created_at: string;
   roles: Role[];
 }
+type ProfileRecord = Pick<ProfileRow, "id" | "display_name" | "created_at">;
+type UserRoleRow = { user_id: string; role: Role };
 
 const roleLabel = (roles: Role[]) =>
   roles.includes("admin") ? "Admin" : roles.includes("moderator") ? "Editor" : "Viewer";
@@ -42,10 +44,10 @@ const AdminUsers = () => {
       .order("created_at", { ascending: false });
     const { data: roleRows } = await supabase.from("user_roles").select("user_id, role");
     const byUser: Record<string, Role[]> = {};
-    (roleRows ?? []).forEach((r: any) => {
+    ((roleRows ?? []) as UserRoleRow[]).forEach((r) => {
       byUser[r.user_id] = [...(byUser[r.user_id] ?? []), r.role];
     });
-    setRows((profiles ?? []).map((p: any) => ({ ...p, roles: byUser[p.id] ?? [] })));
+    setRows(((profiles ?? []) as ProfileRecord[]).map((p) => ({ ...p, roles: byUser[p.id] ?? [] })));
     setLoading(false);
   };
 
@@ -94,7 +96,7 @@ const AdminUsers = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search users…" className="pl-9" />
         </div>
-        <Select value={roleFilter} onValueChange={(v: any) => setRoleFilter(v)}>
+        <Select value={roleFilter} onValueChange={(v) => setRoleFilter(v as "all" | Role)}>
           <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All roles</SelectItem>
@@ -133,7 +135,7 @@ const AdminUsers = () => {
                     <TableCell className="text-right">
                       <Select
                         value={r.roles.includes("admin") ? "admin" : r.roles.includes("moderator") ? "moderator" : "user"}
-                        onValueChange={(v: any) => setRole(r.id, v)}
+                        onValueChange={(v) => setRole(r.id, v as Role)}
                       >
                         <SelectTrigger className="w-32 ml-auto"><SelectValue /></SelectTrigger>
                         <SelectContent>
