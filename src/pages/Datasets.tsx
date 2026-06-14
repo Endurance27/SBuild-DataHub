@@ -38,7 +38,7 @@ const Datasets = () => {
     })();
   }, []);
 
-  const datasets = [
+  const mockDatasets = [
     {
       id: "1",
       title: "Ghana Population Census 2021",
@@ -122,7 +122,7 @@ const Datasets = () => {
     }
   ];
   const datasets = liveDatasets ?? mockDatasets;
-  const mockDatasets = [] as any[]; // placeholder, see actual list above
+
 
 
   const trendingTags = [
