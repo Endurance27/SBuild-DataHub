@@ -7,8 +7,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Award, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Datasets = () => {
+  const [liveDatasets, setLiveDatasets] = useState<any[] | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("datasets")
+        .select("id,title,description,downloads,file_size_mb,published_at,created_at,featured,dataset_tags(tags(name))")
+        .eq("status", "published")
+        .order("downloads", { ascending: false })
+        .limit(24);
+      if (data && data.length) {
+        setLiveDatasets(
+          data.map((d: any) => ({
+            id: d.id,
+            title: d.title,
+            description: d.description ?? "",
+            tags: (d.dataset_tags ?? []).map((t: any) => t.tags?.name).filter(Boolean),
+            downloads: d.downloads ?? 0,
+            uploadDate: (d.published_at ?? d.created_at ?? "").slice(0, 10),
+            fileSize: d.file_size_mb ? `${d.file_size_mb} MB` : "—",
+            featured: d.featured,
+          }))
+        );
+      }
+    })();
+  }, []);
+
   const datasets = [
     {
       id: "1",

@@ -2,32 +2,60 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 type Permission = "read" | "write" | "delete" | "download";
-type Role = "Admin" | "Editor" | "Viewer";
+type Role = "admin" | "moderator" | "user";
 
-const initial: Record<Role, Record<Permission, boolean>> = {
-  Admin: { read: true, write: true, delete: true, download: true },
-  Editor: { read: true, write: true, delete: false, download: true },
-  Viewer: { read: true, write: false, delete: false, download: true },
-};
+const ROLES: Role[] = ["admin", "moderator", "user"];
+const PERMS: Permission[] = ["read", "write", "delete", "download"];
 
 const AdminAccessControl = () => {
-  const [matrix, setMatrix] = useState(initial);
+  const [matrix, setMatrix] = useState<Record<Role, Record<Permission, boolean>>>({
+    admin: { read: true, write: true, delete: true, download: true },
+    moderator: { read: true, write: true, delete: false, download: true },
+    user: { read: true, write: false, delete: false, download: true },
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.from("role_permissions").select("*");
+      if (error) { toast.error(error.message); setLoading(false); return; }
+      const next = { ...matrix };
+      data?.forEach((r: any) => {
+        if (ROLES.includes(r.role) && PERMS.includes(r.permission as Permission)) {
+          next[r.role as Role][r.permission as Permission] = !!r.allowed;
+        }
+      });
+      setMatrix(next);
+      setLoading(false);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = (role: Role, perm: Permission) => {
     setMatrix((m) => ({ ...m, [role]: { ...m[role], [perm]: !m[role][perm] } }));
+  };
+
+  const save = async () => {
+    setSaving(true);
+    const rows = ROLES.flatMap((role) => PERMS.map((p) => ({ role, permission: p, allowed: matrix[role][p] })));
+    const { error } = await supabase.from("role_permissions").upsert(rows, { onConflict: "role,permission" });
+    setSaving(false);
+    if (error) toast.error(error.message);
+    else toast.success("Permissions saved");
   };
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold">Access Control</h1>
-        <p className="text-muted-foreground">Configure permissions per role</p>
+        <p className="text-muted-foreground">Configure permissions per role (persisted)</p>
       </div>
-
       <Card>
         <CardHeader><CardTitle>Role Permissions</CardTitle></CardHeader>
         <CardContent className="p-0">
@@ -35,24 +63,17 @@ const AdminAccessControl = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Role</TableHead>
-                <TableHead className="text-center">Read</TableHead>
-                <TableHead className="text-center">Write</TableHead>
-                <TableHead className="text-center">Delete</TableHead>
-                <TableHead className="text-center">Download</TableHead>
+                {PERMS.map((p) => <TableHead key={p} className="text-center capitalize">{p}</TableHead>)}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(Object.keys(matrix) as Role[]).map((role) => (
+              {ROLES.map((role) => (
                 <TableRow key={role}>
-                  <TableCell className="font-medium">{role}</TableCell>
-                  {(["read", "write", "delete", "download"] as Permission[]).map((p) => (
+                  <TableCell className="font-medium capitalize">{role}</TableCell>
+                  {PERMS.map((p) => (
                     <TableCell key={p} className="text-center">
                       <div className="flex justify-center">
-                        <Switch
-                          checked={matrix[role][p]}
-                          onCheckedChange={() => toggle(role, p)}
-                          disabled={role === "Admin"}
-                        />
+                        <Switch checked={matrix[role][p]} onCheckedChange={() => toggle(role, p)} disabled={loading || role === "admin"} />
                       </div>
                     </TableCell>
                   ))}
@@ -62,9 +83,8 @@ const AdminAccessControl = () => {
           </Table>
         </CardContent>
       </Card>
-
       <div className="flex justify-end">
-        <Button onClick={() => toast.success("Permissions saved")}>Save changes</Button>
+        <Button onClick={save} disabled={saving || loading}>{saving ? "Saving…" : "Save changes"}</Button>
       </div>
     </div>
   );
