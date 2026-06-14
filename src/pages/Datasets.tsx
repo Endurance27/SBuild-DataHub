@@ -121,6 +121,9 @@ const Datasets = () => {
       fileSize: "15.6 MB"
     }
   ];
+  const datasets = liveDatasets ?? mockDatasets;
+  const mockDatasets = [] as any[]; // placeholder, see actual list above
+
 
   const trendingTags = [
     "Demographics", "Economics", "Healthcare", "Education", "Agriculture",
