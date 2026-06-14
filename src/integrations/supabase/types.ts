@@ -381,6 +381,94 @@ export type Database = {
         }
         Relationships: []
       }
+      notebook_likes: {
+        Row: {
+          created_at: string
+          notebook_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          notebook_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          notebook_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notebook_likes_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notebooks: {
+        Row: {
+          author_id: string | null
+          content: string | null
+          created_at: string
+          dataset_id: string | null
+          featured: boolean
+          hidden: boolean
+          id: string
+          language: string
+          likes: number
+          published: boolean
+          slug: string
+          summary: string | null
+          title: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          author_id?: string | null
+          content?: string | null
+          created_at?: string
+          dataset_id?: string | null
+          featured?: boolean
+          hidden?: boolean
+          id?: string
+          language?: string
+          likes?: number
+          published?: boolean
+          slug: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          author_id?: string | null
+          content?: string | null
+          created_at?: string
+          dataset_id?: string | null
+          featured?: boolean
+          hidden?: boolean
+          id?: string
+          language?: string
+          likes?: number
+          published?: boolean
+          slug?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notebooks_dataset_id_fkey"
+            columns: ["dataset_id"]
+            isOneToOne: false
+            referencedRelation: "datasets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           created_at: string
@@ -414,6 +502,27 @@ export type Database = {
           updated_at?: string
           verified?: boolean
           website?: string | null
+        }
+        Relationships: []
+      }
+      platform_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
@@ -482,6 +591,27 @@ export type Database = {
           status?: string
           target_id?: string | null
           target_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          allowed: boolean
+          permission: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+        }
+        Insert: {
+          allowed?: boolean
+          permission: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+        }
+        Update: {
+          allowed?: boolean
+          permission?: string
+          role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
         }
         Relationships: []
